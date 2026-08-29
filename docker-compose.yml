@@ -1,0 +1,31 @@
+services:
+  technocore-signer:
+    build: .
+    container_name: technocore-signer
+    restart: unless-stopped
+
+    volumes:
+      - /opt/technocore-agent/app/technocore_agent.py:/srv/technocore_agent.py:ro
+      - /opt/technocore-agent/identity.pem:/run/secrets/identity.pem:ro
+      - /opt/technocore-agent/passphrase.txt:/run/secrets/passphrase:ro
+      - /opt/technocore-agent/token.txt:/run/secrets/token:ro
+
+    networks:
+      - n8nnet
+
+    read_only: true
+
+    tmpfs:
+      - /tmp
+
+    cap_drop:
+      - ALL
+
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  n8nnet:
+    external: true
+    name: n8n-8hne_default
+
